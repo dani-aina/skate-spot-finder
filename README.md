@@ -1,0 +1,1 @@
+# skate-spot-finder
