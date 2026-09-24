@@ -1,122 +1,78 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import MapIcon from "@mui/icons-material/Map";
+import ChatIcon from "@mui/icons-material/Chat";
+import SearchIcon from "@mui/icons-material/Search";
+import GroupsIcon from "@mui/icons-material/Groups";
+import PersonIcon from "@mui/icons-material/Person";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activeTab, setActiveTab] = useState("map");
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Box sx={{ paddingBottom: 7 }}>
+      <AppBar position="static">
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          <IconButton color="inherit" aria-label="add spot">
+            <AddIcon />
+          </IconButton>
+          <Typography variant="h6">Skate Spot Finder</Typography>
+          <IconButton color="inherit" aria-label="notifications">
+            <NotificationsIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
 
-      <div className="ticks"></div>
+      <Box sx={{ padding: 2 }}>
+        {activeTab === "map" && (
+          <Typography>Home / Map content goes here</Typography>
+        )}
+        {activeTab === "chat" && <Typography>Chat — coming soon</Typography>}
+        {activeTab === "search" && (
+          <Typography>Search content goes here</Typography>
+        )}
+        {activeTab === "communities" && (
+          <Typography>Communities — coming soon</Typography>
+        )}
+        {activeTab === "profile" && (
+          <Typography>Profile content goes here</Typography>
+        )}
+      </Box>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <BottomNavigation
+        value={activeTab}
+        onChange={(event, newValue) => setActiveTab(newValue)}
+        showLabels
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      >
+        <BottomNavigationAction label="Map" value="map" icon={<MapIcon />} />
+        <BottomNavigationAction label="Chat" value="chat" icon={<ChatIcon />} />
+        <BottomNavigationAction
+          label="Search"
+          value="search"
+          icon={<SearchIcon />}
+        />
+        <BottomNavigationAction
+          label="Communities"
+          value="communities"
+          icon={<GroupsIcon />}
+        />
+        <BottomNavigationAction
+          label="Profile"
+          value="profile"
+          icon={<PersonIcon />}
+        />
+      </BottomNavigation>
+    </Box>
+  );
 }
 
-export default App
+export default App;
