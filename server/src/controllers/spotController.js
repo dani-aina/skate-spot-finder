@@ -52,7 +52,7 @@ async function deleteSpot(req, res, next) {
   try {
     const spot = await Spot.findByIdAndDelete(req.params.id);
     if (!spot) return res.status(404).json({ message: "Spot not found" });
-    res.status(204).send();
+    res.status(200).json({ message: "Spot deleted" });
   } catch (err) {
     next(err);
   }

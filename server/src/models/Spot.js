@@ -12,6 +12,8 @@ const SKATE_FEATURE_TAGS = [
   "gap",
   "curb",
 ];
+const GROUND_CONDITIONS = ["smooth", "rough", "mixed"];
+const BUST_RISK_LEVELS = ["low", "medium", "high"];
 
 const spotSchema = new mongoose.Schema(
   {
@@ -26,6 +28,8 @@ const spotSchema = new mongoose.Schema(
       type: [{ type: String, enum: SKATE_FEATURE_TAGS }],
       default: [],
     },
+    groundCondition: { type: String, enum: GROUND_CONDITIONS },
+    bustRisk: { type: String, enum: BUST_RISK_LEVELS },
     createdBy: { type: String, required: true }, // will hold the Clerk user id later
   },
   { timestamps: true },

@@ -13,6 +13,7 @@ router.get("/", getSpots);
 router.get("/:id", getSpotById);
 router.post("/", createSpot);
 router.put("/:id", updateSpot);
+router.patch("/:id", updateSpot);
 router.delete("/:id", deleteSpot);
 
 module.exports = router;
