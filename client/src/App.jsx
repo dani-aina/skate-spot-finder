@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getSpots } from "./api/spot";
+import SpotList from "./components/SpotList";
+import SpotMap from "./components/SpotMap";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -16,6 +19,16 @@ import Typography from "@mui/material/Typography";
 
 function App() {
   const [activeTab, setActiveTab] = useState("map");
+  const [spots, setSpots] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getSpots()
+      .then(setSpots)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <Box sx={{ paddingBottom: 7 }}>
@@ -33,17 +46,12 @@ function App() {
 
       <Box sx={{ padding: 2 }}>
         {activeTab === "map" && (
-          <Typography>Home / Map content goes here</Typography>
-        )}
-        {activeTab === "chat" && <Typography>Chat — coming soon</Typography>}
-        {activeTab === "search" && (
-          <Typography>Search content goes here</Typography>
-        )}
-        {activeTab === "communities" && (
-          <Typography>Communities — coming soon</Typography>
-        )}
-        {activeTab === "profile" && (
-          <Typography>Profile content goes here</Typography>
+          <>
+            <SpotMap />
+            {loading && <Typography>Loading spots…</Typography>}
+            {error && <Typography color="error">Error: {error}</Typography>}
+            {!loading && !error && <SpotList spots={spots} />}
+          </>
         )}
       </Box>
 
