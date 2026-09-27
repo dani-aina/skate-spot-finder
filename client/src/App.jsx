@@ -22,6 +22,9 @@ function App() {
   const [spots, setSpots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedSpotId, setSelectedSpotId] = useState(null);
+  const selectedSpot =
+    spots.find((spot) => spot._id === selectedSpotId) || null;
 
   useEffect(() => {
     getSpots()
@@ -47,10 +50,16 @@ function App() {
       <Box sx={{ padding: 2 }}>
         {activeTab === "map" && (
           <>
-            <SpotMap />
+            <SpotMap
+              spots={spots}
+              selectedSpot={selectedSpot}
+              onSelectSpot={setSelectedSpotId}
+            />
             {loading && <Typography>Loading spots…</Typography>}
             {error && <Typography color="error">Error: {error}</Typography>}
-            {!loading && !error && <SpotList spots={spots} />}
+            {!loading && !error && (
+              <SpotList spots={spots} onSelectSpot={setSelectedSpotId} />
+            )}
           </>
         )}
       </Box>

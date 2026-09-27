@@ -4,11 +4,15 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 
-function SpotList({ spots }) {
+function SpotList({ spots, onSelectSpot }) {
   return (
     <Stack spacing={2}>
       {spots.map((spot) => (
-        <Card key={spot._id}>
+        <Card
+          key={spot._id}
+          onClick={() => onSelectSpot?.(spot._id)}
+          sx={{ cursor: "pointer" }}
+        >
           <CardContent>
             <Typography variant="h6">{spot.name}</Typography>
 
