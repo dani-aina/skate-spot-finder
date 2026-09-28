@@ -39,9 +39,9 @@ function SpotList({ spots, onSelectSpot }) {
                   variant="outlined"
                 />
               )}
-              {spot.bustRisk && (
+              {spot.kickOutRisk && (
                 <Chip
-                  label={`bust risk: ${spot.bustRisk}`}
+                  label={`kick-out risk: ${spot.kickOutRisk}`}
                   size="small"
                   color="warning"
                   variant="outlined"

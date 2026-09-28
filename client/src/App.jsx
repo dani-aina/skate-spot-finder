@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import { getSpots } from "./api/spot";
-import SpotList from "./components/SpotList";
-import SpotMap from "./components/SpotMap";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -17,12 +14,19 @@ import PersonIcon from "@mui/icons-material/Person";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import { getSpots, createSpot } from "./api/spot";
+import SpotList from "./components/SpotList";
+import SpotMap from "./components/SpotMap";
+import SpotForm from "./components/SpotForm";
+
 function App() {
   const [activeTab, setActiveTab] = useState("map");
   const [spots, setSpots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSpotId, setSelectedSpotId] = useState(null);
+  const [isAddingSpot, setIsAddingSpot] = useState(false);
+
   const selectedSpot =
     spots.find((spot) => spot._id === selectedSpotId) || null;
 
@@ -33,11 +37,25 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
+  async function handleAddSpot(spotData) {
+    try {
+      const newSpot = await createSpot(spotData);
+      setSpots((prevSpots) => [...prevSpots, newSpot]);
+      setSelectedSpotId(newSpot._id);
+      setIsAddingSpot(false);
+    } catch (err) {
+      alert(`Failed to add spot: ${err.message}`);
+    }
+  }
   return (
     <Box sx={{ paddingBottom: 7 }}>
       <AppBar position="static">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <IconButton color="inherit" aria-label="add spot">
+          <IconButton
+            color="inherit"
+            aria-label="add spot"
+            onClick={() => setIsAddingSpot(true)}
+          >
             <AddIcon />
           </IconButton>
           <Typography variant="h6">Skate Spot Finder</Typography>
@@ -48,17 +66,38 @@ function App() {
       </AppBar>
 
       <Box sx={{ padding: 2 }}>
-        {activeTab === "map" && (
+        {isAddingSpot ? (
+          <SpotForm
+            onClose={() => setIsAddingSpot(false)}
+            onSubmit={handleAddSpot}
+          />
+        ) : (
           <>
-            <SpotMap
-              spots={spots}
-              selectedSpot={selectedSpot}
-              onSelectSpot={setSelectedSpotId}
-            />
-            {loading && <Typography>Loading spots…</Typography>}
-            {error && <Typography color="error">Error: {error}</Typography>}
-            {!loading && !error && (
-              <SpotList spots={spots} onSelectSpot={setSelectedSpotId} />
+            {activeTab === "map" && (
+              <>
+                <SpotMap
+                  spots={spots}
+                  selectedSpot={selectedSpot}
+                  onSelectSpot={setSelectedSpotId}
+                />
+                {loading && <Typography>Loading spots…</Typography>}
+                {error && <Typography color="error">Error: {error}</Typography>}
+                {!loading && !error && (
+                  <SpotList spots={spots} onSelectSpot={setSelectedSpotId} />
+                )}
+              </>
+            )}
+            {activeTab === "chat" && (
+              <Typography>Chat — coming soon</Typography>
+            )}
+            {activeTab === "search" && (
+              <Typography>Search content goes here</Typography>
+            )}
+            {activeTab === "communities" && (
+              <Typography>Communities — coming soon</Typography>
+            )}
+            {activeTab === "profile" && (
+              <Typography>Profile content goes here</Typography>
             )}
           </>
         )}
