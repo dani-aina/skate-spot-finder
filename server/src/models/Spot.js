@@ -3,18 +3,20 @@ const mongoose = require("mongoose");
 const SKATE_FEATURE_TAGS = [
   "stairs",
   "handrail",
-  "flat_rail",
-  "round_rail",
+  "flat_bar",
+  "out_rail",
   "ledge",
   "hubba",
   "manual_pad",
   "bank",
   "gap",
   "curb",
+  "flat_ground",
+  "wall_ride",
+  "drop_in",
 ];
-const GROUND_CONDITIONS = ["smooth", "rough", "mixed"];
-const BUST_RISK_LEVELS = ["low", "medium", "high"];
-
+const GROUND_CONDITIONS = ["smooth", "rough", "mixed", "moderate"];
+const KICK_OUT_RISK_LEVELS = ["low", "medium", "high", "very_high"];
 const spotSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -29,7 +31,7 @@ const spotSchema = new mongoose.Schema(
       default: [],
     },
     groundCondition: { type: String, enum: GROUND_CONDITIONS },
-    bustRisk: { type: String, enum: BUST_RISK_LEVELS },
+    kickOutRisk: { type: String, enum: KICK_OUT_RISK_LEVELS },
     createdBy: { type: String, required: true }, // will hold the Clerk user id later
   },
   { timestamps: true },
