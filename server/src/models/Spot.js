@@ -17,6 +17,7 @@ const SKATE_FEATURE_TAGS = [
 ];
 const GROUND_CONDITIONS = ["smooth", "rough", "mixed", "moderate"];
 const KICK_OUT_RISK_LEVELS = ["low", "medium", "high", "very_high"];
+
 const spotSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -32,6 +33,7 @@ const spotSchema = new mongoose.Schema(
     },
     groundCondition: { type: String, enum: GROUND_CONDITIONS },
     kickOutRisk: { type: String, enum: KICK_OUT_RISK_LEVELS },
+    photoUrl: { type: String, trim: true },
     createdBy: { type: String, required: true }, // will hold the Clerk user id later
   },
   { timestamps: true },
