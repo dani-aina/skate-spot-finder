@@ -3,6 +3,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
+import Box from "@mui/material/Box";
 
 function SpotList({ spots, onSelectSpot }) {
   return (
@@ -13,6 +14,14 @@ function SpotList({ spots, onSelectSpot }) {
           onClick={() => onSelectSpot?.(spot._id)}
           sx={{ cursor: "pointer" }}
         >
+          {spot.photoUrl && (
+            <Box
+              component="img"
+              src={spot.photoUrl}
+              alt={spot.name}
+              sx={{ width: "100%", height: 180, objectFit: "cover" }}
+            />
+          )}
           <CardContent>
             <Typography variant="h6">{spot.name}</Typography>
 

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { uploadPhoto } from "../api/upload";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -40,6 +42,8 @@ function SpotForm({ onClose, onSubmit }) {
   const [tags, setTags] = useState([]);
   const [groundCondition, setGroundCondition] = useState("");
   const [kickOutRisk, setKickOutRisk] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   function handleSubmit() {
     onSubmit({
@@ -53,8 +57,23 @@ function SpotForm({ onClose, onSubmit }) {
       tags,
       groundCondition,
       kickOutRisk,
+      photoUrl,
       createdBy: "current-user",
     });
+  }
+  async function handlePhotoChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const url = await uploadPhoto(file);
+      setPhotoUrl(url);
+    } catch (err) {
+      alert(`Failed to upload photo: ${err.message}`);
+    } finally {
+      setUploading(false);
+    }
   }
   return (
     <Box sx={{ padding: 2 }}>
@@ -183,11 +202,21 @@ function SpotForm({ onClose, onSubmit }) {
       {step === 3 && (
         <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
           <Typography variant="h6">Photos</Typography>
-          <Typography variant="body2" color="text.secondary">
-            Photo upload is coming soon — for now, submit the spot without
-            photos.
-          </Typography>
-          <Button variant="contained" onClick={handleSubmit}>
+
+          <input type="file" accept="image/*" onChange={handlePhotoChange} />
+
+          {uploading && <Typography variant="body2">Uploading…</Typography>}
+          {photoUrl && !uploading && (
+            <Typography variant="body2" color="success.main">
+              Photo uploaded ✓
+            </Typography>
+          )}
+
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={uploading}
+          >
             Submit spot
           </Button>
         </Box>

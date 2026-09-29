@@ -58,7 +58,7 @@ function App() {
           >
             <AddIcon />
           </IconButton>
-          <Typography variant="h6">Skate Spot Finder</Typography>
+          <Typography variant="h6">Kleechat</Typography>
           <IconButton color="inherit" aria-label="notifications">
             <NotificationsIcon />
           </IconButton>
