@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { clerkMiddleware } = require("@clerk/express");
 const errorHandler = require("./middleware/errorHandler");
 
 const spotRoutes = require("./routes/spotRoutes");
@@ -9,6 +10,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(clerkMiddleware());
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/spots", spotRoutes);
