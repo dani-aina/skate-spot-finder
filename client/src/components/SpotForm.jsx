@@ -33,7 +33,7 @@ const SKATE_FEATURE_TAGS = [
 const GROUND_CONDITIONS = ["smooth", "rough", "mixed", "moderate"];
 const KICK_OUT_RISK_LEVELS = ["low", "medium", "high", "very_high"];
 
-function SpotForm({ onClose, onSubmit }) {
+function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
   const [step, setStep] = useState(0);
   const [location, setLocation] = useState(null);
   const [name, setName] = useState("");
@@ -58,7 +58,9 @@ function SpotForm({ onClose, onSubmit }) {
       groundCondition,
       kickOutRisk,
       photoUrl,
-      createdBy: "current-user",
+      createdBy: userId,
+      createdByName: userName,
+      createdByImageUrl: userImageUrl,
     });
   }
   async function handlePhotoChange(e) {

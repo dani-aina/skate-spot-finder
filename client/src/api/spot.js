@@ -10,10 +10,13 @@ export async function getSpots() {
   return res.json();
 }
 
-export async function createSpot(spotData) {
+export async function createSpot(spotData, token) {
   const res = await fetch(`${BASE_URL}/spots`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(spotData),
   });
 

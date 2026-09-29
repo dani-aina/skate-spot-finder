@@ -1,4 +1,5 @@
 const express = require("express");
+const { requireAuth } = require("@clerk/express");
 const {
   getSpots,
   getSpotById,
@@ -11,9 +12,9 @@ const router = express.Router();
 
 router.get("/", getSpots);
 router.get("/:id", getSpotById);
-router.post("/", createSpot);
-router.put("/:id", updateSpot);
-router.patch("/:id", updateSpot);
-router.delete("/:id", deleteSpot);
+router.post("/", requireAuth(), createSpot);
+router.put("/:id", requireAuth(), updateSpot);
+router.patch("/:id", requireAuth(), updateSpot);
+router.delete("/:id", requireAuth(), deleteSpot);
 
 module.exports = router;

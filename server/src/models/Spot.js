@@ -34,7 +34,9 @@ const spotSchema = new mongoose.Schema(
     groundCondition: { type: String, enum: GROUND_CONDITIONS },
     kickOutRisk: { type: String, enum: KICK_OUT_RISK_LEVELS },
     photoUrl: { type: String, trim: true },
-    createdBy: { type: String, required: true }, // will hold the Clerk user id later
+    createdBy: { type: String, required: true },
+    createdByName: { type: String, trim: true },
+    createdByImageUrl: { type: String, trim: true },
   },
   { timestamps: true },
 );

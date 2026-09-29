@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
 
 function SpotList({ spots, onSelectSpot }) {
   return (
@@ -57,6 +58,20 @@ function SpotList({ spots, onSelectSpot }) {
                 />
               )}
             </Stack>
+            {spot.createdByName && (
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1.5 }}
+              >
+                <Avatar
+                  src={spot.createdByImageUrl}
+                  alt={spot.createdByName}
+                  sx={{ width: 20, height: 20 }}
+                />
+                <Typography variant="caption" color="text.secondary">
+                  Added by {spot.createdByName}
+                </Typography>
+              </Box>
+            )}
           </CardContent>
         </Card>
       ))}
