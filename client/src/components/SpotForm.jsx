@@ -8,11 +8,6 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LocationPicker from "./LocationPicker";
 import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Chip from "@mui/material/Chip";
 
 const SKATE_FEATURE_TAGS = [
@@ -44,6 +39,15 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
   const [kickOutRisk, setKickOutRisk] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+
+  const toggleTag = (tag) => {
+    setTags(
+      (prev) =>
+        prev.includes(tag)
+          ? prev.filter((t) => t !== tag) // already picked → remove it
+          : [...prev, tag], // not picked → add it
+    );
+  };
 
   function handleSubmit() {
     onSubmit({
@@ -136,61 +140,56 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
             onChange={(e) => setAddress(e.target.value)}
           />
 
-          <FormControl>
-            <InputLabel id="tags-label">Tags</InputLabel>
-            <Select
-              labelId="tags-label"
-              multiple
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              input={<OutlinedInput label="Tags" />}
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {selected.map((tag) => (
-                    <Chip key={tag} label={tag} size="small" />
-                  ))}
-                </Box>
-              )}
-            >
+          {/* Tags: pick many */}
+          <Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              Features · pick all that apply
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
               {SKATE_FEATURE_TAGS.map((tag) => (
-                <MenuItem key={tag} value={tag}>
-                  {tag}
-                </MenuItem>
+                <Chip
+                  key={tag}
+                  label={tag.replaceAll("_", " ")}
+                  color={tags.includes(tag) ? "primary" : "default"}
+                  onClick={() => toggleTag(tag)}
+                />
               ))}
-            </Select>
-          </FormControl>
+            </Box>
+          </Box>
 
-          <FormControl>
-            <InputLabel id="ground-label">Ground condition</InputLabel>
-            <Select
-              labelId="ground-label"
-              label="Ground condition"
-              value={groundCondition}
-              onChange={(e) => setGroundCondition(e.target.value)}
-            >
+          {/* Ground condition: pick one */}
+          <Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              Ground condition · pick one
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
               {GROUND_CONDITIONS.map((c) => (
-                <MenuItem key={c} value={c}>
-                  {c}
-                </MenuItem>
+                <Chip
+                  key={c}
+                  label={c}
+                  color={groundCondition === c ? "primary" : "default"}
+                  onClick={() => setGroundCondition(c)}
+                />
               ))}
-            </Select>
-          </FormControl>
+            </Box>
+          </Box>
 
-          <FormControl>
-            <InputLabel id="risk-label">Kick-out risk</InputLabel>
-            <Select
-              labelId="risk-label"
-              label="Kick-out risk"
-              value={kickOutRisk}
-              onChange={(e) => setKickOutRisk(e.target.value)}
-            >
+          {/* Kick-out risk: pick one */}
+          <Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              Kick-out risk · pick one
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
               {KICK_OUT_RISK_LEVELS.map((r) => (
-                <MenuItem key={r} value={r}>
-                  {r}
-                </MenuItem>
+                <Chip
+                  key={r}
+                  label={r.replaceAll("_", " ")}
+                  color={kickOutRisk === r ? "primary" : "default"}
+                  onClick={() => setKickOutRisk(r)}
+                />
               ))}
-            </Select>
-          </FormControl>
+            </Box>
+          </Box>
 
           <Button
             variant="contained"

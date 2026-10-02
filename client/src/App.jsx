@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import { useUser, useAuth, SignIn, UserButton } from "@clerk/clerk-react";
+
+import logo from "./assets/kleechat-logo.svg";
+import logoReversed from "./assets/kleechat-logo-reversed.svg";
+
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -74,13 +78,32 @@ function App() {
 
   if (!isSignedIn && !isGuest) {
     return (
-      <Box sx={{ p: 2, maxWidth: 400, mx: "auto", mt: 4 }}>
-        <Typography variant="h5" sx={{ mb: 2 }}>
-          Kleechat Logo goes here
-        </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+          pt: 6,
+        }}
+      >
+        <Box
+          component="img"
+          src={logo}
+          alt="Kleechat"
+          sx={{ height: 48, mb: 3 }}
+        />
         <SignIn
           routing="virtual"
           appearance={{
+            variables: {
+              colorPrimary: "#004027",
+              colorText: "#041C2C",
+              colorBackground: "#FFFFFF",
+              colorDanger: "#D32F2F",
+              fontFamily: "Manrope, sans-serif",
+              borderRadius: "8px",
+            },
             elements: {
               rootBox: { width: "fit-content", margin: "0 auto" },
               headerTitle: { display: "none" },
@@ -91,7 +114,11 @@ function App() {
         <Button
           variant="text"
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{
+            mt: 2,
+            color: "#004027",
+            "&:hover": { backgroundColor: "rgba(0, 64, 39, 0.08)" },
+          }}
           onClick={() => setIsGuest(true)}
         >
           Continue as guest
@@ -112,7 +139,12 @@ function App() {
           >
             <AddIcon />
           </IconButton>
-          <Typography variant="h6">Kleechat</Typography>
+          <Box
+            component="img"
+            src={logoReversed}
+            alt="Kleechat"
+            sx={{ height: 28 }}
+          />
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <IconButton color="inherit" aria-label="notifications">
               <NotificationsIcon />
