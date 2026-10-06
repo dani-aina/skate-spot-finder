@@ -58,7 +58,12 @@ function App() {
 
   const selectedSpot =
     spots.find((spot) => spot._id === selectedSpotId) || null;
-  const filteredSpots = spots.filter((spot) => {
+
+  const visibleSpots = spots.filter(
+    (spot) => spot.visibility !== "secret" || spot.createdBy === user?.id,
+  );
+
+  const filteredSpots = visibleSpots.filter((spot) => {
     if (!searchText.trim()) return true;
     const query = searchText.toLowerCase();
     return (

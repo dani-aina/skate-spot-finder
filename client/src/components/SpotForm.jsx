@@ -27,6 +27,7 @@ const SKATE_FEATURE_TAGS = [
 ];
 const GROUND_CONDITIONS = ["smooth", "rough", "mixed", "moderate"];
 const KICK_OUT_RISK_LEVELS = ["low", "medium", "high", "very_high"];
+const SPOT_VISIBILITY = ["public", "secret"];
 
 function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
   const [step, setStep] = useState(0);
@@ -37,6 +38,7 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
   const [tags, setTags] = useState([]);
   const [groundCondition, setGroundCondition] = useState("");
   const [kickOutRisk, setKickOutRisk] = useState("");
+  const [visibility, setVisibility] = useState("public");
   const [photoUrl, setPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -61,6 +63,7 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
       tags,
       groundCondition,
       kickOutRisk,
+      visibility,
       photoUrl,
       createdBy: userId,
       createdByName: userName,
@@ -186,6 +189,23 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
                   label={r.replaceAll("_", " ")}
                   color={kickOutRisk === r ? "primary" : "default"}
                   onClick={() => setKickOutRisk(r)}
+                />
+              ))}
+            </Box>
+          </Box>
+
+          {/* Visibility: pick one */}
+          <Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              Who can see this spot?
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+              {SPOT_VISIBILITY.map((v) => (
+                <Chip
+                  key={v}
+                  label={v}
+                  color={visibility === v ? "primary" : "default"}
+                  onClick={() => setVisibility(v)}
                 />
               ))}
             </Box>
