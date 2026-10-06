@@ -17,6 +17,7 @@ const SKATE_FEATURE_TAGS = [
 ];
 const GROUND_CONDITIONS = ["smooth", "rough", "mixed", "moderate"];
 const KICK_OUT_RISK_LEVELS = ["low", "medium", "high", "very_high"];
+const SPOT_VISIBILITY = ["public", "secret"];
 
 const spotSchema = new mongoose.Schema(
   {
@@ -33,6 +34,7 @@ const spotSchema = new mongoose.Schema(
     },
     groundCondition: { type: String, enum: GROUND_CONDITIONS },
     kickOutRisk: { type: String, enum: KICK_OUT_RISK_LEVELS },
+    visibility: { type: String, enum: SPOT_VISIBILITY, default: "public" },
     photoUrl: { type: String, trim: true },
     createdBy: { type: String, required: true },
     createdByName: { type: String, trim: true },
