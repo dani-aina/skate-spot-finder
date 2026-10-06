@@ -1,7 +1,7 @@
 import { useRef, useCallback, useEffect } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-const mapContainerStyle = { width: "100%", height: "400px" };
+const mapContainerStyle = { width: "100%", height: "100%" };
 const sydneyCenter = { lat: -33.8688, lng: 151.2093 };
 
 function SpotMap({ spots = [], selectedSpot, onSelectSpot }) {

@@ -8,11 +8,7 @@ import Avatar from "@mui/material/Avatar";
 
 function SpotCard({ spot, onSelectSpot }) {
   return (
-    <Card
-      key={spot._id}
-      onClick={() => onSelectSpot?.(spot._id)}
-      sx={{ cursor: "pointer" }}
-    >
+    <Card onClick={() => onSelectSpot?.(spot._id)} sx={{ cursor: "pointer" }}>
       {spot.photoUrl && (
         <Box
           component="img"

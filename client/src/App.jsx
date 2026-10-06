@@ -25,6 +25,12 @@ import SpotList from "./components/SpotList";
 import SpotMap from "./components/SpotMap";
 import SpotForm from "./components/SpotForm";
 
+import Paper from "@mui/material/Paper";
+import InputBase from "@mui/material/InputBase";
+
+import Drawer from "@mui/material/Drawer";
+import SpotCard from "./components/SpotCard";
+
 // Helper function to get a display name for the user
 
 function getDisplayName(user) {
@@ -48,8 +54,20 @@ function App() {
   const [selectedSpotId, setSelectedSpotId] = useState(null);
   const [isAddingSpot, setIsAddingSpot] = useState(false);
 
+  const [searchText, setSearchText] = useState("");
+
   const selectedSpot =
     spots.find((spot) => spot._id === selectedSpotId) || null;
+  const filteredSpots = spots.filter((spot) => {
+    if (!searchText.trim()) return true;
+    const query = searchText.toLowerCase();
+    return (
+      spot.name?.toLowerCase().includes(query) ||
+      spot.description?.toLowerCase().includes(query) ||
+      spot.address?.toLowerCase().includes(query) ||
+      spot.tags?.some((tag) => tag.toLowerCase().includes(query))
+    );
+  });
 
   const displayName = getDisplayName(user);
 
@@ -154,8 +172,8 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ padding: 2 }}>
-        {isAddingSpot ? (
+      {isAddingSpot ? (
+        <Box sx={{ padding: 2 }}>
           <SpotForm
             onClose={() => setIsAddingSpot(false)}
             onSubmit={handleAddSpot}
@@ -163,40 +181,56 @@ function App() {
             userName={displayName}
             userImageUrl={user?.imageUrl}
           />
-        ) : (
-          <>
-            {activeTab === "map" && (
-              <>
-                <SpotMap
-                  spots={spots}
-                  selectedSpot={selectedSpot}
-                  onSelectSpot={setSelectedSpotId}
-                />
-                {loading && <Typography>Loading spots…</Typography>}
-                {error && <Typography color="error">Error: {error}</Typography>}
-                {!loading && !error && (
-                  <SpotList spots={spots} onSelectSpot={setSelectedSpotId} />
-                )}
-              </>
-            )}
-            {activeTab === "chat" && (
-              <Typography>Chat — coming soon</Typography>
-            )}
-            {activeTab === "search" && (
-              <Typography>Search content goes here</Typography>
-            )}
-            {activeTab === "communities" && (
-              <Typography>Communities — coming soon</Typography>
-            )}
-            {activeTab === "profile" &&
-              (isSignedIn ? (
-                <Typography>Profile content goes here</Typography>
-              ) : (
-                <Typography>Sign in to view your profile.</Typography>
-              ))}
-          </>
-        )}
-      </Box>
+        </Box>
+      ) : activeTab === "map" ? (
+        <Box sx={{ position: "relative", height: "calc(100vh - 112px)" }}>
+          <SpotMap
+            spots={filteredSpots}
+            selectedSpot={selectedSpot}
+            onSelectSpot={setSelectedSpotId}
+          />
+          {loading && <Typography sx={{ p: 2 }}>Loading spots…</Typography>}
+          {error && (
+            <Typography color="error" sx={{ p: 2 }}>
+              Error: {error}
+            </Typography>
+          )}
+          <Paper
+            sx={{
+              position: "absolute",
+              bottom: 16,
+              left: 16,
+              right: 16,
+              display: "flex",
+              alignItems: "center",
+              px: 2,
+              py: 0.5,
+              borderRadius: 999,
+            }}
+          >
+            <InputBase
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Search by feature, name, or area..."
+              sx={{ flex: 1 }}
+            />
+            <SearchIcon color="action" />
+          </Paper>
+        </Box>
+      ) : (
+        <Box sx={{ padding: 2 }}>
+          {activeTab === "chat" && <Typography>Chat — coming soon</Typography>}
+          {activeTab === "communities" && (
+            <Typography>Communities — coming soon</Typography>
+          )}
+          {activeTab === "profile" &&
+            (isSignedIn ? (
+              <Typography>Profile content goes here</Typography>
+            ) : (
+              <Typography>Sign in to view your profile.</Typography>
+            ))}
+        </Box>
+      )}
 
       <BottomNavigation
         value={activeTab}
@@ -206,11 +240,6 @@ function App() {
       >
         <BottomNavigationAction label="Map" value="map" icon={<MapIcon />} />
         <BottomNavigationAction label="Chat" value="chat" icon={<ChatIcon />} />
-        <BottomNavigationAction
-          label="Search"
-          value="search"
-          icon={<SearchIcon />}
-        />
         <BottomNavigationAction
           label="Communities"
           value="communities"
@@ -222,6 +251,21 @@ function App() {
           icon={<PersonIcon />}
         />
       </BottomNavigation>
+      <Drawer
+        anchor="bottom"
+        open={Boolean(selectedSpot)}
+        onClose={() => setSelectedSpotId(null)}
+        PaperProps={{
+          sx: {
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            maxHeight: "70vh",
+            overflowY: "auto",
+          },
+        }}
+      >
+        {selectedSpot && <SpotCard spot={selectedSpot} />}
+      </Drawer>
     </Box>
   );
 }
