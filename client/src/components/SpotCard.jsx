@@ -7,15 +7,31 @@ import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 
 function SpotCard({ spot, onSelectSpot }) {
+  const photos =
+    spot.photoUrls?.length > 0
+      ? spot.photoUrls
+      : spot.photoUrl
+        ? [spot.photoUrl]
+        : [];
   return (
     <Card onClick={() => onSelectSpot?.(spot._id)} sx={{ cursor: "pointer" }}>
-      {spot.photoUrl && (
-        <Box
-          component="img"
-          src={spot.photoUrl}
-          alt={spot.name}
-          sx={{ width: "100%", height: 180, objectFit: "cover" }}
-        />
+      {photos.length > 0 && (
+        <Box sx={{ display: "flex", overflowX: "auto", gap: 1 }}>
+          {photos.map((url, index) => (
+            <Box
+              key={index}
+              component="img"
+              src={url}
+              alt={`${spot.name} photo ${index + 1}`}
+              sx={{
+                width: 240,
+                height: 180,
+                objectFit: "cover",
+                flexShrink: 0,
+              }}
+            />
+          ))}
+        </Box>
       )}
       <CardContent>
         <Typography variant="h6">{spot.name}</Typography>

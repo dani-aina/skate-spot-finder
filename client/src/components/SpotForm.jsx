@@ -39,7 +39,7 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
   const [groundCondition, setGroundCondition] = useState("");
   const [kickOutRisk, setKickOutRisk] = useState("");
   const [visibility, setVisibility] = useState("public");
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [photoUrls, setPhotoUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
 
   const toggleTag = (tag) => {
@@ -64,22 +64,22 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
       groundCondition,
       kickOutRisk,
       visibility,
-      photoUrl,
+      photoUrls,
       createdBy: userId,
       createdByName: userName,
       createdByImageUrl: userImageUrl,
     });
   }
   async function handlePhotoChange(e) {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
     try {
       setUploading(true);
-      const url = await uploadPhoto(file);
-      setPhotoUrl(url);
+      const urls = await Promise.all(files.map((file) => uploadPhoto(file)));
+      setPhotoUrls(urls);
     } catch (err) {
-      alert(`Failed to upload photo: ${err.message}`);
+      alert(`Failed to upload photos: ${err.message}`);
     } finally {
       setUploading(false);
     }
@@ -224,12 +224,17 @@ function SpotForm({ onClose, onSubmit, userId, userName, userImageUrl }) {
         <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
           <Typography variant="h6">Photos</Typography>
 
-          <input type="file" accept="image/*" onChange={handlePhotoChange} />
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handlePhotoChange}
+          />
 
           {uploading && <Typography variant="body2">Uploading…</Typography>}
-          {photoUrl && !uploading && (
+          {photoUrls.length > 0 && !uploading && (
             <Typography variant="body2" color="success.main">
-              Photo uploaded ✓
+              Photos uploaded ✓
             </Typography>
           )}
 
