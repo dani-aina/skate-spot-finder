@@ -32,7 +32,8 @@ import InputBase from "@mui/material/InputBase";
 import Drawer from "@mui/material/Drawer";
 import SpotCard from "./components/SpotCard";
 
-// Helper function to get a display name for the user
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 function getDisplayName(user) {
   if (!user) return "";
@@ -54,11 +55,16 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedSpotId, setSelectedSpotId] = useState(null);
   const [isAddingSpot, setIsAddingSpot] = useState(false);
+  const [profileTab, setProfileTab] = useState("public");
 
   const [searchText, setSearchText] = useState("");
 
   const selectedSpot =
     spots.find((spot) => spot._id === selectedSpotId) || null;
+
+  const mySpots = spots.filter((spot) => spot.createdBy === user?.id);
+  const publicSpots = mySpots.filter((spot) => spot.visibility !== "secret");
+  const secretSpots = mySpots.filter((spot) => spot.visibility === "secret");
 
   const visibleSpots = spots.filter(
     (spot) => spot.visibility !== "secret" || spot.createdBy === user?.id,
@@ -232,17 +238,63 @@ function App() {
           {activeTab === "profile" &&
             (isSignedIn ? (
               <Box sx={{ textAlign: "center" }}>
-                <Avatar
-                  src={user?.imageUrl}
-                  alt={displayName}
-                  sx={{ width: 80, height: 80 }}
-                />
-                <Typography variant="h6" sx={{ mt: 1 }}>
-                  {displayName}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {user?.primaryEmailAddress?.emailAddress}
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    gap: 2,
+                  }}
+                >
+                  <Avatar
+                    src={user?.imageUrl}
+                    alt={displayName}
+                    sx={{ width: 80, height: 80 }}
+                  />
+                  <Box sx={{ textAlign: "left" }}>
+                    <Typography variant="h6">{displayName}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {user?.primaryEmailAddress?.emailAddress}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Tabs
+                  value={profileTab}
+                  onChange={(event, newValue) => setProfileTab(newValue)}
+                  centered
+                  sx={{ mt: 2 }}
+                >
+                  <Tab label="Public" value="public" />
+                  <Tab label="Secret" value="secret" />
+                </Tabs>
+                {profileTab === "public" && (
+                  <Box>
+                    {publicSpots.length === 0 ? (
+                      <Typography sx={{ mt: 2 }} color="text.secondary">
+                        You haven't added any public spots yet.
+                      </Typography>
+                    ) : (
+                      <SpotList
+                        spots={publicSpots}
+                        onSelectSpot={setSelectedSpotId}
+                      />
+                    )}
+                  </Box>
+                )}
+                {profileTab === "secret" && (
+                  <Box>
+                    {secretSpots.length === 0 ? (
+                      <Typography sx={{ mt: 2 }} color="text.secondary">
+                        You haven't added any secret spots yet.
+                      </Typography>
+                    ) : (
+                      <SpotList
+                        spots={secretSpots}
+                        onSelectSpot={setSelectedSpotId}
+                      />
+                    )}
+                  </Box>
+                )}
               </Box>
             ) : (
               <Typography>Sign in to view your profile.</Typography>
