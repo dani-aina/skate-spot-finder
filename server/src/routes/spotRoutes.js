@@ -1,5 +1,5 @@
 const express = require("express");
-const { requireAuth } = require("@clerk/express");
+const { requireApiAuth } = require("../middleware/requireApiAuth");
 const {
   getSpots,
   getSpotById,
@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.get("/", getSpots);
 router.get("/:id", getSpotById);
-router.post("/", requireAuth(), createSpot);
-router.put("/:id", requireAuth(), updateSpot);
-router.patch("/:id", requireAuth(), updateSpot);
-router.delete("/:id", requireAuth(), deleteSpot);
+router.post("/", requireApiAuth, createSpot);
+router.put("/:id", requireApiAuth, updateSpot);
+router.patch("/:id", requireApiAuth, updateSpot);
+router.delete("/:id", requireApiAuth, deleteSpot);
 
 module.exports = router;
