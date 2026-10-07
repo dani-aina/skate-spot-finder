@@ -36,6 +36,10 @@ const spotSchema = new mongoose.Schema(
     kickOutRisk: { type: String, enum: KICK_OUT_RISK_LEVELS },
     visibility: { type: String, enum: SPOT_VISIBILITY, default: "public" },
     photoUrl: { type: String, trim: true },
+    photoUrls: {
+      type: [String],
+      default: [],
+    },
     createdBy: { type: String, required: true },
     createdByName: { type: String, trim: true },
     createdByImageUrl: { type: String, trim: true },
