@@ -19,6 +19,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import PersonIcon from "@mui/icons-material/Person";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
 
 import { getSpots, createSpot } from "./api/spot";
 import SpotList from "./components/SpotList";
@@ -230,7 +231,19 @@ function App() {
           )}
           {activeTab === "profile" &&
             (isSignedIn ? (
-              <Typography>Profile content goes here</Typography>
+              <Box sx={{ textAlign: "center" }}>
+                <Avatar
+                  src={user?.imageUrl}
+                  alt={displayName}
+                  sx={{ width: 80, height: 80 }}
+                />
+                <Typography variant="h6" sx={{ mt: 1 }}>
+                  {displayName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {user?.primaryEmailAddress?.emailAddress}
+                </Typography>
+              </Box>
             ) : (
               <Typography>Sign in to view your profile.</Typography>
             ))}
